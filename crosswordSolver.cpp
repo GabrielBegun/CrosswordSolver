@@ -1,8 +1,8 @@
 #include <iostream>
-#include <ctime>
 #include <fstream>
 #include <string>
 #include "Grid.h"
+//#include "Util.cpp"
 using namespace std;
 
 /* TODO
@@ -11,9 +11,6 @@ Make a private constructor for Grid and use a factory to obtain it
 fix Word::isComplete() so that it runs in consant time (because of done). The function update() may not be needed
 improve exit strategy for solve();
 */
-
-void tolowcaps(char * filename); // 
-void createPuzzles(int n, int length); // Creates n new puzzles of length x length size 
 
 int main(int argc, char* argv){
 	cout << "Crossword Solver!" << endl;
@@ -24,17 +21,17 @@ int main(int argc, char* argv){
 
 	try {
 		Grid grid;
-		char gridfile[] = "grid0.txt";
-		char storefile[] = "sol0.txt";
+		char gridfile[] = "Grids/grid0.txt";
+		char storefile[] = "Solutions/sol0.txt";
 		//grid.readDictionary("lowersmallDic.txt");
 		grid.readDictionary("lowerdicctionary.txt"); // Do something in case this fails
 
 		for (int ii = 0; ii < 10; ii++){
-			gridfile[4] = (char)(ii + 48);
-			storefile[3] = (char)(ii + 48);
+			gridfile[10] = (char)(ii + 48);
+			storefile[9] = (char)(ii + 48);
 			grid.formGrid(gridfile);
-			//grid.solve();
-			grid.solveRand();
+			//grid.solve(); // Slow and less efficent. Does not always work
+			grid.solveRand(); // Better solving algorithm
 			grid.print(); // Print solution
 			grid.store(storefile);
 			grid.clear();
@@ -52,48 +49,3 @@ int main(int argc, char* argv){
 	return 1;
 }
 
-void tolowcaps(char * filename){
-	ifstream inFile;
-	inFile.open(filename);
-	ofstream newFile;
-	string newfilename = "lower";
-	newfilename.append(filename);
-	newFile.open(newfilename.c_str());
-	string temp_s;
-	while (!inFile.eof()){
-		getline(inFile, temp_s);
-		for (int ii = 0; ii<temp_s.size(); ii++)
-			temp_s[ii] = tolower(temp_s[ii]);
-		newFile << temp_s.c_str() << endl;
-		cout << temp_s.c_str() << endl;
-	}
-	inFile.close();
-	newFile.close();
-	cout << "New lower case version of " << filename << " called " << newfilename << endl;
-}
-
-void createPuzzles(int nn, int length = 400){
-	if (nn >= 10 || nn < 0){
-		cout << "Please create less grids. Double digits or negatives not yet supported" << endl;
-		return;
-	}
-	cout << "Creating " << nn << " grids of size " << length << "x" << length << endl;
-	srand(time(NULL));
-	char  filename[] = "mgrid0.txt";
-	ofstream myfile;
-	for (int ii = 0; ii<nn; ii++){
-		filename[5] = (char)(ii + 48);
-		myfile.open(filename);
-		myfile << "Board size is " << length << " x " << length << endl;
-		for (int jj = 0; jj<length; jj++){
-			for (int kk = 0; kk<length; kk++){
-				// should be 1/2
-				if (rand()<(RAND_MAX / 2)) myfile << '_'; // find correct param
-				else myfile << '#';
-			}
-			myfile << endl;
-		}
-		myfile.close();
-	}
-	cout << nn << " puzzles created" << endl;
-}

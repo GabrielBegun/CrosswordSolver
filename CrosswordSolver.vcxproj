@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClCompile Include="crosswordSolver.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
   <ItemGroup>
